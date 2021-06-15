@@ -4,15 +4,9 @@
 
 import os
 import platform
-import subprocess
 import time
 from pathlib import Path
-
-
-def gsutil_getsize(url=''):
-    # gs://bucket/file size https://cloud.google.com/storage/docs/gsutil/commands/du
-    s = subprocess.check_output('gsutil du %s' % url, shell=True).decode('utf-8')
-    return eval(s.split(' ')[0]) if len(s) else 0  # bytes
+import torch
 
 
 def attempt_download(weights):
@@ -20,10 +14,9 @@ def attempt_download(weights):
     weights = weights.strip().replace("'", '')
     file = Path(weights).name
 
-    # msg = weights + ' missing, try downloading from https://github.com/ultralytics/yolov5/releases/'
+    msg = weights + ' missing, try downloading from https://github.com/ultralytics/yolov5/releases/'
     models = ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt',
               'sdd_yolov5s.pt', 'sdd_yolov5m.pt', 'sdd_yolov5l.pt', 'sdd_yolov5x.pt']  # available models
-
     if file in models and not os.path.isfile(weights):
         # Google Drive
         d = {'yolov5s.pt': '1R5T6rIyy3lLwgFXNms8whc-387H0tMQO',
@@ -36,6 +29,26 @@ def attempt_download(weights):
              'sdd_yolov5x.pt': '17XheuE4gyuDY-JDTcOKxTHE5PTDfYlAY'}
         r = gdrive_download(id=d[file], name=weights) if file in d else 1
         if r == 0 and os.path.exists(weights) and os.path.getsize(weights) > 1E6:  # check
+            return
+
+        try:  # GitHub
+            url = 'https://github.com/ultralytics/yolov5/releases/download/v2.0/' + file
+            print('Downloading %s to %s...' % (url, weights))
+            if platform.system() == 'Darwin':  # avoid MacOS python requests certificate error
+                r = os.system('curl -L %s -o %s' % (url, weights))
+            else:
+                torch.hub.download_url_to_file(url, weights)
+            assert os.path.exists(weights) and os.path.getsize(weights) > 1E6  # check
+        except Exception as e:  # GCP
+            print('Download error: %s' % e)
+            url = 'https://storage.googleapis.com/ultralytics/yolov5/ckpt/' + file
+            print('Downloading %s to %s...' % (url, weights))
+            r = os.system('curl -L %s -o %s' % (url, weights))  # torch.hub.download_url_to_file(url, weights)
+        finally:
+            if not (os.path.exists(weights) and os.path.getsize(weights) > 1E6):  # check
+                os.remove(weights) if os.path.exists(weights) else None  # remove partial downloads
+                print('ERROR: Download failure: %s' % msg)
+            print('')
             return
 
 
