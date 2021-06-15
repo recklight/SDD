@@ -1,0 +1,38 @@
+ftp:
+  url:
+    '192.168.50.140'
+  user:
+    'AI_FTP'
+  passwd:
+    '123456'
+  risk_path:
+    'NXs'
+  raw_path:
+    'raw_data'
+  log_path:
+    'run_log'
+
+mask_screen:
+  # The first parameter need to be the same as the --source
+  # image area coordinates [[x1, x2, y1, y2],]
+  rtsp://192.168.50.101:554/profile1:
+    [ [ 0, 350, 0, 1080 ], [ 350, 920, 600, 1080 ],
+      [ 1550, 1920, 0, 1080 ], [ 1300, 1920, 600, 1080 ] ]
+  rtsp://192.168.50.102:554/profile1:
+    [ [ 0, 300, 0, 1080 ], [ 1540, 1920, 0, 1080 ] ]
+  rtsp://192.168.50.103:554/profile1:
+    [ [ 0, 340, 0, 1080 ], [ 340, 870, 650, 1080 ], [ 1480, 1920, 0, 1080 ] ]
+  rtsp://192.168.50.104:554/profile1:
+    [ [ 0, 150, 0, 1080 ], [ 1300, 1650, 590, 1080 ], [ 1650, 1920, 0, 1080 ] ]
+
+trim_screen:
+  # The first parameter need to be the same as the --source
+  # [ X-axis coordinates on the left side, X-axis coordinates on the right side]
+  rtsp://192.168.50.101:554/profile1:
+    [ 350, 1550 ]
+  rtsp://192.168.50.102:554/profile1:
+    [ 300, 1540 ]
+  rtsp://192.168.50.103:554/profile1:
+    [ 340, 1480 ]
+  rtsp://192.168.50.104:554/profile1:
+    [ 150, 1650 ]
