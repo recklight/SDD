@@ -51,4 +51,6 @@ $ sh start.sh
 $ sudo sh -c "echo 200 > /sys/devices/pwm-fan/target_pwm"
 ```
 
+- 可參考實際 [運行影片(將前往YT)](https://youtu.be/5SeDiPgxT60)
+![20210317_160603](https://user-images.githubusercontent.com/53622566/154070774-f2c395ea-77ed-4cdc-88ff-8ca98406ee2a.jpg)
 
