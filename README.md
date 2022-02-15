@@ -49,7 +49,6 @@ $ sh start.sh
 - 手動調整風扇轉速
 ```bash
 $ sudo sh -c "echo 200 > /sys/devices/pwm-fan/target_pwm"
-$ echo -e "\033[41;37mStarting program. Fan speed: 200\033[0m"
 ```
 
 
