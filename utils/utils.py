@@ -15,6 +15,15 @@ def sgn_final(signum, frame):
     tx = '\n\n Kyle Chuang. \n AUO LT ML5A01 \n Goodbye~😘\n'
     raise StopIteration(f"\033[42;37m{tx}\033[0m")
 
+def box_judge(people_coords, img, dist_thres_lim=(2,)):
+    num_boxes = len(people_coords)
+    cv2.putText(img, f'Num:{num_boxes}', (80, 50),
+                cv2.FONT_HERSHEY_DUPLEX,
+                2, (0, 255, 255), 2, cv2.LINE_AA)
+    if num_boxes > dist_thres_lim[0]:
+        return True, people_coords
+    else:
+        return False, []
 
 def distancing(people_coords, img, dist_thres_lim=(200, 250)):
     high_risk_coordinate = []

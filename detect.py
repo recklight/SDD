@@ -21,7 +21,7 @@ from utils.general import (
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 from utils.utils import (
     set_logg, sgn_final, mask_screens, trim_screens, multi_screens,
-    distancing, save_imgs_regular, uploadftp_log, uploadftp_raw_data, uploadftp_risk)
+    distancing, save_imgs_regular, uploadftp_log, uploadftp_raw_data, uploadftp_risk, box_judge)
 
 
 def detect(args):
@@ -192,8 +192,11 @@ def detect(args):
                         else:
                             plot_one_box(xyxy, im0, label=f'{1e2 * conf:.1f}', color=[0, 255, 0], line_thickness=2)
 
-            ## Plot lines connecting people
-            risk_report[i], risk_coords[i] = distancing(people_coords[i], im0, dist_thres_lim=args.risk_range)
+            if args.mode_judge == 'distance':
+                risk_report[i], risk_coords[i] = distancing(people_coords[i], im0, dist_thres_lim=args.risk_range)
+            elif args.mode_judge == 'box':
+                risk_report[i], risk_coords[i] = box_judge(people_coords[i], im0, dist_thres_lim=args.risk_range)
+
             # Edge area edit (cut)
             if args.trim_screen:
                 trim_screens(param['trim_screen'], path[i], im0)
@@ -228,7 +231,7 @@ def detect(args):
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*fourcc), fps, (w, h))
                     vid_writer.write(im0)
 
-            # Judgment
+            # Judgement
             if webcam and args.judge:
                 if args.upload_ftp and args.rawdata_ftp > 0 and args.rawdata_ftp > nums_raw_pic > -1:
                     tmps_raw_pic[nums_raw_pic] = im0s
@@ -271,6 +274,7 @@ if __name__ == '__main__':
     parser.add_argument('--screen-size', type=int, nargs="+", default=(1920, 1080))
 
     parser.add_argument('--judge', action='store_true')
+    parser.add_argument('--mode-judge', type=str, default='distance', help='Judge mode(distance, box)')
     parser.add_argument("--risk-range", type=int, nargs="+", default=(310,),
                         help='Social distance range (High risk range, Low risk range)')
     parser.add_argument('--alarm-frames', type=int, default=30, help='Number of alarm frames.')

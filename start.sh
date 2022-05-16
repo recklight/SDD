@@ -11,6 +11,8 @@ while true; do
   --conf 0.88 \
   --iou 0.45 \
   --judge \
+  --mode distance \
+  --risk 310 \
   --alarm 30 \
   --break 0 \
   --reset 6 \

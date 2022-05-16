@@ -20,6 +20,8 @@
   --conf 0.88 \
   --iou 0.45 \
   --judge \ # 對預測結果進行判斷&回報&上傳ftp
+  --mode distance \ # 判斷模式;distance->按照box間距離, box->按照box數量
+  --risk 310 \ # 判斷閥值; distance->pixel, box->box數量
   --alarm 30 \ # NG次數, 大於此次數則進行上傳ftp
   --break 0 \ # 當攝影機不穩定時(常輸出相同照片), 使用此功能中止程式(0). 關閉此功能可增加效能
   --reset 6 \ # 如果有設定--break下, 相同照片出現reset=N次數將關閉停止運行 
