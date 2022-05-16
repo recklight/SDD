@@ -10,10 +10,9 @@ import torch
 
 
 def attempt_download(file):
-    model_dict = {'yolov5s.pt': '1R5T6rIyy3lLwgFXNms8whc-387H0tMQO',
-                  'yolov5m.pt': '1vobuEExpWQVpXExsJ2w-Mbf3HJjWkQJr',
-                  'yolov5l.pt': '1hrlqD1Wdei7UT4OgT785BEk1JwnSvNEV',
-                  'yolov5x.pt': '1mM8aZJlWTxOg7BZJvNUMrTnA2AbeCVzS',
+    model_dict = {'yolov5s.pt': '15HvL10tbrgiEIfu8ZYeg35ya7R4kfZmG',
+                  'yolov5m.pt': '1v1Ju8Kk9nKqXKs06_zirrL2sIFafIYzc',
+                  'yolov5l.pt': '15faQsp59wAV6FvvZq_8ho5BOPMAAzHmU',
                   'sdd_yolov5s.pt': '13tTDUQzFO37AVXE2_KAwuVhpZykuDEDt',
                   'sdd_yolov5m.pt': '1qRJ7oSY2qbcqa1v-0ZnnW_GvVIlqtzoX',
                   'sdd_yolov5l.pt': '1Z1bS64QxOyqIYkElW_ZoXW8v_JkxuycK',
