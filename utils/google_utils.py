@@ -9,47 +9,18 @@ from pathlib import Path
 import torch
 
 
-def attempt_download(weights):
-    # Attempt to download pretrained weights if not found locally
-    weights = weights.strip().replace("'", '')
-    file = Path(weights).name
-
-    msg = weights + ' missing, try downloading from https://github.com/ultralytics/yolov5/releases/'
-    models = ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt',
-              'sdd_yolov5s.pt', 'sdd_yolov5m.pt', 'sdd_yolov5l.pt', 'sdd_yolov5x.pt']  # available models
-    if file in models and not os.path.isfile(weights):
-        # Google Drive
-        d = {'yolov5s.pt': '1R5T6rIyy3lLwgFXNms8whc-387H0tMQO',
-             'yolov5m.pt': '1vobuEExpWQVpXExsJ2w-Mbf3HJjWkQJr',
-             'yolov5l.pt': '1hrlqD1Wdei7UT4OgT785BEk1JwnSvNEV',
-             'yolov5x.pt': '1mM8aZJlWTxOg7BZJvNUMrTnA2AbeCVzS',
-             'sdd_yolov5s.pt': '13tTDUQzFO37AVXE2_KAwuVhpZykuDEDt',
-             'sdd_yolov5m.pt': '1qRJ7oSY2qbcqa1v-0ZnnW_GvVIlqtzoX',
-             'sdd_yolov5l.pt': '1Z1bS64QxOyqIYkElW_ZoXW8v_JkxuycK',
-             'sdd_yolov5x.pt': '17XheuE4gyuDY-JDTcOKxTHE5PTDfYlAY'}
-        r = gdrive_download(id=d[file], name=weights) if file in d else 1
-        if r == 0 and os.path.exists(weights) and os.path.getsize(weights) > 1E6:  # check
-            return
-
-        try:  # GitHub
-            url = 'https://github.com/ultralytics/yolov5/releases/download/v2.0/' + file
-            print('Downloading %s to %s...' % (url, weights))
-            if platform.system() == 'Darwin':  # avoid MacOS python requests certificate error
-                r = os.system('curl -L %s -o %s' % (url, weights))
-            else:
-                torch.hub.download_url_to_file(url, weights)
-            assert os.path.exists(weights) and os.path.getsize(weights) > 1E6  # check
-        except Exception as e:  # GCP
-            print('Download error: %s' % e)
-            url = 'https://storage.googleapis.com/ultralytics/yolov5/ckpt/' + file
-            print('Downloading %s to %s...' % (url, weights))
-            r = os.system('curl -L %s -o %s' % (url, weights))  # torch.hub.download_url_to_file(url, weights)
-        finally:
-            if not (os.path.exists(weights) and os.path.getsize(weights) > 1E6):  # check
-                os.remove(weights) if os.path.exists(weights) else None  # remove partial downloads
-                print('ERROR: Download failure: %s' % msg)
-            print('')
-            return
+def attempt_download(file):
+    model_dict = {'yolov5s.pt': '1R5T6rIyy3lLwgFXNms8whc-387H0tMQO',
+                  'yolov5m.pt': '1vobuEExpWQVpXExsJ2w-Mbf3HJjWkQJr',
+                  'yolov5l.pt': '1hrlqD1Wdei7UT4OgT785BEk1JwnSvNEV',
+                  'yolov5x.pt': '1mM8aZJlWTxOg7BZJvNUMrTnA2AbeCVzS',
+                  'sdd_yolov5s.pt': '13tTDUQzFO37AVXE2_KAwuVhpZykuDEDt',
+                  'sdd_yolov5m.pt': '1qRJ7oSY2qbcqa1v-0ZnnW_GvVIlqtzoX',
+                  'sdd_yolov5l.pt': '1Z1bS64QxOyqIYkElW_ZoXW8v_JkxuycK',
+                  'sdd_yolov5x.pt': '17XheuE4gyuDY-JDTcOKxTHE5PTDfYlAY'}
+    file = Path(str(file).strip().replace("'", ''))
+    if file.name in model_dict.keys() and not file.exists():
+        os.system(f"sh weights/download_weights.sh {model_dict[file.name]} {file}")
 
 
 def gdrive_download(id='1n_oKgR81BJtqk75b00eAjdv03qVCQn2f', name='coco128.zip'):
