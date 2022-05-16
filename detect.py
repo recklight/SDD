@@ -259,14 +259,7 @@ def detect(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', type=str, default='sdd_yolov5m.pt', help='model.pt path')
-    # parser.add_argument('--weights', type=str, default='yolov5l.pt', help='model.pt path')
-
-    # parser.add_argument('--source', type=str, default='source.txt')
-    # parser.add_argument('--source', type=str, default='0', help='source')
-    # parser.add_argument('--source', type=str, default='rtsp://192.168.50.101:554/profile1')
     parser.add_argument('--source', type=str, default='inference/images', help='source')
-    # parser.add_argument('--source', type=str, default='inference/videos/people.mp4')
-
     parser.add_argument('--param', type=str, default='parameters.yaml', help='Detect parameters.')
 
     parser.add_argument("--mask-screen", action='store_true', help='Masking the screen of the predicted data.')
@@ -284,7 +277,6 @@ if __name__ == '__main__':
     parser.add_argument('--reset-frames', type=int, default=6, help='Number of reset frames.')
     parser.add_argument('--delay-time', type=int, default=20, help='Time between alarms and alarms.(seconds)')
 
-    # 當攝影機不穩定時常輸出相同照片, 使用此功能中止程式. 關閉此功能可增加效能
     parser.add_argument('--break-frames', type=int, default=0,
                         help='The program will be terminated when the same photo appears more than <int> times.')
 
@@ -298,7 +290,6 @@ if __name__ == '__main__':
 
     parser.add_argument('--colorful-bbox', action='store_true', help='Use different color bboxes')
 
-    # parser.add_argument('--save-txt', action='store_false', help='save results to *.txt')
     parser.add_argument('--output', type=str, default='inference/output', help='output folder')  # output folder
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.4, help='object confidence threshold')
